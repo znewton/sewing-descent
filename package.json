@@ -1,0 +1,44 @@
+{
+    "name": "sewing-descent",
+    "version": "0.0.1",
+    "description": "Website for my sewing projects",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node ./index.js --dev",
+        "build": "node ./index.js",
+        "lint": "eslint .",
+        "lint:fix": "eslint --fix .",
+        "format": "prettier . --write"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/znewton/sewing-descent.git"
+    },
+    "keywords": [
+        "sewing",
+        "javascript",
+        "typescript",
+        "markdown",
+        "static",
+        "html",
+        "css"
+    ],
+    "author": "znewton",
+    "license": "GPL-3.0-or-later",
+    "bugs": {
+        "url": "https://github.com/znewton/sewing-descent/issues"
+    },
+    "homepage": "https://github.com/znewton/sewing-descent#readme",
+    "devDependencies": {
+        "eslint": "^8.56.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-jsdoc": "^48.0.2",
+        "nodemon": "^3.0.3",
+        "prettier": "^3.2.4",
+        "sass": "^1.72.0",
+        "showdown": "^2.1.0",
+        "tar": "^6.2.1"
+    },
+    "dependencies": {}
+}
