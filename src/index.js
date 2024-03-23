@@ -4,9 +4,32 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
+import open from "open";
 import { buildPages } from "./pages.js";
 import { buildStyles } from "./styles.js";
-import { getOutputDir, getRootDir } from "./utils.js";
+import { exists, getOutputDir, getRootDir } from "./utils.js";
+import { initDevServer, initWatchAndCompile } from "./dev.js";
+
+/**
+ * Make sure root directory is correct.
+ */
+async function validateRootDir() {
+    const rootDir = getRootDir();
+    const packageJsonFile = await fs.readFile(
+        path.join(rootDir, "package.json"),
+    );
+    try {
+        const packageJson = JSON.parse(packageJsonFile);
+        if (packageJson.name !== "sewing-descent") {
+            throw new Error(
+                `Incorrect root directory detected: package name is ${packageJson.name} but should be "sewing-descent".`,
+            );
+        }
+    } catch (error) {
+        console.error("Error validating Root Dir:", error);
+        throw new Error("Root Dir invalid. Please run from project root.");
+    }
+}
 
 /**
  * Creates output directory if it doesn't exist.
@@ -15,7 +38,7 @@ import { getOutputDir, getRootDir } from "./utils.js";
 async function createCleanOutputDir() {
     console.log("Cleaning output directory...");
     const outDir = getOutputDir();
-    if ((await fs.stat(outDir)).isDirectory()) {
+    if (await exists(outDir, "directory")) {
         await fs.rm(outDir, { recursive: true });
     }
     await fs.mkdir(outDir);
@@ -28,7 +51,7 @@ async function createCleanOutputDir() {
 async function copyStaticFiles() {
     console.log("Copying static files...");
     const staticDir = path.join(getRootDir(), "static");
-    if (!(await fs.stat(staticDir)).isDirectory()) {
+    if (!(await exists(staticDir, "directory"))) {
         console.log("No static files to copy");
         return;
     }
@@ -44,34 +67,44 @@ async function copyStaticFiles() {
 }
 
 /**
- * Initialize hot reload dev server.
- * @returns {Promise<void>} callback to shutdown the server.
- */
-async function initDevServer() {}
-
-/**
  * Compile everything necessary to view the site.
  * @returns {Promise<void>}
  */
 async function build() {
-    const mode = process.argv.includes("--dev") ? "dev" : "prod";
+    await validateRootDir();
     await createCleanOutputDir();
 
+    const mode = process.argv.includes("--dev") ? "dev" : "prod";
+
+    const compile = async () =>
+        Promise.all([
+            copyStaticFiles().catch((error) => {
+                console.error("Error copying static files", error);
+            }),
+            buildStyles().catch((error) => {
+                console.error("Error building styles", error);
+            }),
+            buildPages({ hotReload: mode === "dev" }).catch((error) => {
+                console.error("Error building pages", error);
+            }),
+        ]);
     if (mode === "dev") {
         process.env.NODE_ENV = "development";
+        await compile();
         await initDevServer();
+        open(path.join(getOutputDir(), "index.html"));
+        await initWatchAndCompile(compile);
     } else {
         process.env.NODE_ENV = "production";
+        await compile();
     }
-
-    await Promise.all([
-        copyStaticFiles(),
-        buildStyles(),
-        buildPages({ hotReload: mode === "dev" }),
-    ]);
 }
 
-build().then((error) => {
-    console.error("Build Error:", error);
-    process.exit(1);
-});
+build()
+    .catch((error) => {
+        console.error("Build Error:", error);
+        process.exit(1);
+    })
+    .then(() => {
+        console.log("Build complete!");
+    });

@@ -1,3 +1,16 @@
 <script>
     console.log("Hot Reload Enabled");
+    webSocket = new WebSocket("wss://localhost:4567");
+    webSocket.onerror = (event) => {
+        console.error(
+            "Error opening Websocket server to listen for reload",
+            event,
+        );
+    };
+    webSocket.onopen = (event) => {
+        console.log("Listening for reload updates from server...");
+    };
+    webSocket.onmessage = (event) => {
+        window.location.reload();
+    };
 </script>

@@ -4,8 +4,8 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { Converter as MarkdownConverter } from "showdown";
-import { getOutputDir, getRootDir } from "./utils";
+import showdown from "showdown";
+import { getOutputDir, getRootDir } from "./utils.js";
 
 /**
  * @typedef PagesOptions
@@ -46,9 +46,9 @@ function buildPageHtml(title, content, contentType, baseTemplateHtml) {
     const parsedContent =
         contentType === "html"
             ? content
-            : new MarkdownConverter().makeHtml(content);
+            : new showdown.Converter().makeHtml(content);
     return baseTemplateHtml
-        .replace("{{{TITLE}}}", title)
+        .replace("{{{TITLE}}}", title === "Index" ? "Home" : title)
         .replace("{{{CONTENT}}}", parsedContent);
 }
 
@@ -58,6 +58,7 @@ function buildPageHtml(title, content, contentType, baseTemplateHtml) {
  * @returns {Promise<void>}
  */
 export async function buildPages(options) {
+    console.log("Building Pages...");
     const baseTemplateHtml = await getBaseTemplateHtml(options);
 
     const rootDir = getRootDir();
@@ -88,7 +89,9 @@ export async function buildPages(options) {
                     `${titlePart[0].toUpperCase()}${titlePart.slice(1).toLowerCase()}`,
             )
             .join(" ");
-        const content = await fs.readFile(inputPageFile.path);
+        const content = (
+            await fs.readFile(path.join(inputPageFile.path, inputPageFile.name))
+        ).toString();
         const pageHtml = buildPageHtml(
             title,
             content,
@@ -101,4 +104,5 @@ export async function buildPages(options) {
     }
 
     await Promise.all(outputPageWritePs);
+    console.log("Finished building Pages");
 }
