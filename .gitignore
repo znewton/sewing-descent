@@ -131,3 +131,5 @@ dist
 
 # not mine to share
 static/*.ttf
+
+.DS_STORE

@@ -10,6 +10,11 @@
     --warning-primary: #8f3b1b;
 }
 
+@font-face {
+    font-family: punkboy;
+    src: url(./static/punkboy.ttf);
+}
+
 html,
 body {
     scroll-behavior: smooth;

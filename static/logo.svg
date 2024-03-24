@@ -4,33 +4,39 @@
 <svg
    width="32"
    height="32"
+   viewBox="0 0 32 32"
    version="1.1"
    id="svg1"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-   <style>
-    text {
-      fill: #403d38;
-    }
-    @media (prefers-color-scheme: dark) {
-      text {
-        fill: #c7beb7;
-      }
-    }
-  </style>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#111111"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px" />
   <defs
      id="defs1" />
   <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:6.87223px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.171805"
-       x="0.47201076"
-       y="7.4056172"
+       style="font-style:normal;font-weight:normal;font-size:28.4109px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.710267"
+       x="0.32203379"
+       y="29.251028"
        id="text1"><tspan
          id="tspan1"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Punkboy;-inkscape-font-specification:Punkboy;stroke-width:0.171805"
-         x="0.47201076"
-         y="7.4056172">SD</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Punkboy;-inkscape-font-specification:Punkboy;stroke-width:0.710267"
+         x="0.32203379"
+         y="29.251028"
+         sodipodi:role="line">SD</tspan></text>
   </g>
 </svg>
