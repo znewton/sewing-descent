@@ -91,9 +91,6 @@ async function build() {
         process.env.NODE_ENV = "development";
         await compile();
         await initDevServer();
-        import("open").then((open) => {
-            open(path.join(getOutputDir(), "index.html"));
-        });
         await initWatchAndCompile(compile);
     } else {
         process.env.NODE_ENV = "production";
