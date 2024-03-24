@@ -7,6 +7,7 @@
     "scripts": {
         "start": "node ./src/index.js --dev",
         "build": "node ./src/index.js",
+        "build:ci": "./setup.sh && npm run build",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
         "format": "prettier . --write"
