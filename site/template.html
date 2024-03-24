@@ -6,12 +6,33 @@
         <title>Sewing Descent | {{{TITLE}}}</title>
     </head>
     <body>
+        <link rel="stylesheet" href="./styles/index.css" />
         <header>
-            <h1 class="display">Sewing Descent</h1>
+            <section>
+                <h1 class="display">
+                    <a href="./index.html">Sewing Descent</a>
+                </h1>
+            </section>
+            <section>
+                <nav>
+                    <a href="./projects.html">Projects</a>
+                    <a href="./tutorials.html">Tutorials</a>
+                    <a href="./about.html">About</a>
+                </nav>
+            </section>
         </header>
         <main>{{{CONTENT}}}</main>
-        <footer>Made by Zach</footer>
-        <link rel="stylesheet" href="./styles/index.css" />
+        <footer>
+            Made with &#x2764; by&nbsp;
+            <a href="https://github.com/znewton/sewing-descent">Zach</a>
+        </footer>
+        <script>
+            document
+                .querySelectorAll(
+                    `nav a[href="./${document.URL.split("/").slice(-1)[0]}"]`,
+                )
+                .forEach((link) => (link.className += " current-link"));
+        </script>
         {{{DEV}}}
     </body>
 </html>

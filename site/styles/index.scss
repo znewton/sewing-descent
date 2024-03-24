@@ -1,11 +1,122 @@
+:root {
+    --background-dark-primary: #0f0e0d;
+    --foreground-dark-primary: #f8f6f0;
+    --background-dark-secondary: #403d38;
+    --foreground-dark-secondary: #c7beb7;
+    --background-light: #e8e6e0;
+    --foreground-light: #0f0e0d;
+    --background-other: #9c8979;
+    --action-primary: #668d3c;
+    --warning-primary: #8f3b1b;
+}
+
+html,
+body {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: Verdana, Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+    width: 100%;
 }
 
 p {
     font-family: Times, "Times New Roman", Georgia, serif;
 }
 
+a {
+    color: var(--action-primary);
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 h1.display {
+    margin: 0;
+    padding: 0;
     font-family: punkboy, Verdana, Arial, Helvetica, sans-serif;
+    a {
+        color: inherit;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+header {
+    display: flex;
+    padding: 1rem;
+    border-bottom: 1px solid var(--background-dark-secondary);
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav {
+    a {
+        color: inherit;
+        font-family: punkboy, Verdana, Arial, Helvetica, sans-serif;
+        text-decoration: none;
+        font-size: 1.2rem;
+        &:not(:first-child) {
+            padding-left: 1rem;
+        }
+        &.current-link {
+            color: var(--action-primary);
+        }
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+footer {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    a {
+        color: inherit;
+    }
+}
+
+.font-heavy {
+    font-weight: 600;
+}
+.font-light {
+    font-weight: 400;
+}
+
+.button {
+    color: inherit;
+    padding: 1rem;
+    border-radius: 2rem;
+    border: 1px solid;
+    transition: box-shadow 200ms ease-out;
+    text-decoration: none;
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+        box-shadow: 0.25rem 0.25rem 0.75rem var(--background-dark-primary);
+    }
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.text-center {
+    text-align: center;
 }
