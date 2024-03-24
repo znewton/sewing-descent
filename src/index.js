@@ -4,7 +4,6 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import open from "open";
 import { buildPages } from "./pages.js";
 import { buildStyles } from "./styles.js";
 import { exists, getOutputDir, getRootDir } from "./utils.js";
@@ -92,7 +91,9 @@ async function build() {
         process.env.NODE_ENV = "development";
         await compile();
         await initDevServer();
-        open(path.join(getOutputDir(), "index.html"));
+        import("open").then((open) => {
+            open(path.join(getOutputDir(), "index.html"));
+        });
         await initWatchAndCompile(compile);
     } else {
         process.env.NODE_ENV = "production";
