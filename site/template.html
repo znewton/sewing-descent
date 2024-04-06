@@ -79,6 +79,9 @@
         {{{CONTENT}}}
         <footer>
             <section>
+                <a href="/faq.html">FAQs</a>
+            </section>
+            <section>
                 <a
                     class="social-link"
                     href="https://www.instagram.com/sewingdescent/"
@@ -117,23 +120,14 @@
             </section>
             <section>
                 <span class="no-break"
-                    >Made with &#x2764; by&nbsp;
+                    >Made with &#x2764;&#xFE0E; by&nbsp;
                     <a href="https://github.com/znewton/sewing-descent"
                         >Zach</a
                     ></span
                 >
             </section>
         </footer>
-        <script>
-            window.addEventListener("load", () => {
-                document.getElementById("no-transition-on-load").remove();
-            });
-            document
-                .querySelectorAll(
-                    `nav a[href="/${document.URL.split("/").slice(-1).join("")}"]`,
-                )
-                .forEach((link) => (link.className += " current-link"));
-        </script>
+        <script src="/scripts/dom.js"></script>
         {{{DEV}}}
     </body>
 </html>

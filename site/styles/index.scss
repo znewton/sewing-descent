@@ -13,7 +13,7 @@ $mobile-breakpoint: 768px;
     --nav-menu-button-transition-duration: 150ms;
     --nav-menu-transition-duration: 200ms;
 
-    --mobile-breakpoint: $mobile-breakpoint;
+    --mobile-breakpoint: #{$mobile-breakpoint};
 
     --system-ui-font: system-ui, "Segoe UI", Roboto, Helvetica, Arial,
         sans-serif, "Segoe UI Symbol";
@@ -254,13 +254,13 @@ footer {
     border-top: 1px solid var(--background-secondary);
     a {
         color: inherit;
+        text-decoration: underline;
     }
     a.social-link {
         display: flex;
         align-items: center;
         margin-bottom: 0;
         white-space: nowrap;
-        text-decoration: underline;
         &:hover {
             color: var(--action-primary);
         }
@@ -356,15 +356,7 @@ blockquote {
 
 ul {
     padding-left: 1rem;
-    &.bad-list {
-        list-style: none;
-        li::before {
-            font-family: "Segoe UI Symbol", sans-serif;
-            content: "\01F44E\FE0E";
-            margin-right: 0.25rem;
-            color: var(--warning-primary);
-        }
-    }
+    &.bad-list,
     &.good-list {
         list-style: none;
         li {
@@ -373,10 +365,17 @@ ul {
             }
             &::before {
                 font-family: "Segoe UI Symbol", sans-serif;
-                content: "\01F44D\FE0E";
                 margin-right: 0.25rem;
-                color: var(--action-primary);
+                font-weight: 400;
             }
         }
+    }
+    &.bad-list li::before {
+        content: "\01F44E\FE0E";
+        color: var(--warning-primary);
+    }
+    &.good-list li::before {
+        content: "\01F44D\FE0E";
+        color: var(--action-primary);
     }
 }

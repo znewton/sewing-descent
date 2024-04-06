@@ -6,8 +6,6 @@ main {
 }
 
 header {
-    background-color: var(--background-primary);
-    box-shadow: 0px 0.75rem 1.5rem 1.5rem var(--background-primary);
     border-bottom: none;
 }
 main section {
@@ -46,6 +44,7 @@ main section.cover {
     justify-content: center;
     align-items: center;
     text-shadow: 0.25rem 0.25rem 0.5rem var(--background-primary);
+    box-shadow: inset 0px 0.75rem 1.5rem 1.5rem var(--background-primary), inset 0px -0.75rem 1.5rem 1.5rem var(--background-primary);
     h2 {
         font-size: 3rem;
         text-align: center;
@@ -59,13 +58,7 @@ main section.cover {
         );
     }
 }
-main section:nth-of-type(2) {
-    padding-top: 2rem;
-    background-color: var(--background-primary);
-    box-shadow: 0px -0.75rem 1.5rem 1.5rem var(--background-primary);
-}
 
 footer {
     border-top: none;
-    background-color: var(--background-primary);
 }

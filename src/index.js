@@ -8,6 +8,7 @@ import { initDev } from "./dev.js";
 import { buildPages } from "./pages.js";
 import { buildStyles } from "./styles.js";
 import { exists, getOutputDir, getRootDir } from "./utils.js";
+import { minifyOutputFiles } from "./optimize.js";
 
 /**
  * Make sure root directory is correct.
@@ -71,6 +72,10 @@ async function build() {
 	await validateRootDir();
 	await createCleanOutputDir();
 
+	if (!process.argv.includes("--verbose")) {
+		console.debug = () => {};
+	}
+
 	const mode = process.argv.includes("--dev") ? "dev" : "prod";
 
 	const compile = async () =>
@@ -92,6 +97,7 @@ async function build() {
 	} else {
 		process.env.NODE_ENV = "production";
 		await compile();
+		await minifyOutputFiles();
 	}
 }
 
