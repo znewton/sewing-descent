@@ -5,7 +5,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import showdown from "showdown";
-import { getOutputDir, getRootDir } from "./utils.js";
+import { exists, getOutputDir, getRootDir } from "./utils.js";
 
 /**
  * @typedef PagesOptions
@@ -53,29 +53,36 @@ function buildPageHtml(title, content, contentType, baseTemplateHtml) {
 }
 
 /**
- * Builds all HTML pages wrapped with the template file.
- * @param {PagesOptions} options - page build options
+ * Builds all HTML pages wrapped with the template file for a given directory.
+ * @param {string} baseTemplateHtml - base template to build from.
+ * @param {string} rootDirectoryPath - Path for the root of the directory to build
  * @returns {Promise<void>}
  */
-export async function buildPages(options) {
-    console.log("Building Pages...");
-    const baseTemplateHtml = await getBaseTemplateHtml(options);
-
-    const rootDir = getRootDir();
+async function buildPagesInDirectory(baseTemplateHtml, rootDirectoryPath) {
+    const inputPageFiles = await fs.readdir(rootDirectoryPath, {
+        withFileTypes: true,
+        encoding: "utf-8",
+        recursive: true,
+    });
     const outDir = getOutputDir();
-    const inputPageDir = path.join(rootDir, "site/pages");
-    const inputPageFiles = (
-        await fs.readdir(inputPageDir, {
-            withFileTypes: true,
-            encoding: "utf-8",
-        })
-    ).filter((file) => file.isFile());
     /**
      * @type {Promise<void>[]}
      */
     const outputPageWritePs = [];
     for (const inputPageFile of inputPageFiles) {
         const [fileName, fileType] = inputPageFile.name.split(".");
+        if (!fileType) {
+            const dirPath = path.join(outDir, fileName);
+            if (!(await exists(dirPath))) await fs.mkdir(dirPath);
+            continue;
+        }
+        const inputFilePath = path.join(inputPageFile.path, inputPageFile.name);
+        const outputFilePath = path
+            .join(
+                inputPageFile.path.replace(rootDirectoryPath, ""),
+                `${fileName}.html`,
+            )
+            .trim("/");
         if (!["md", "html"].includes(fileType)) {
             console.error(
                 `File ${inputPageFile.name} at ${inputPageFile.path} is not a valid type. Must be "md" or "html".`,
@@ -89,9 +96,7 @@ export async function buildPages(options) {
                     `${titlePart[0].toUpperCase()}${titlePart.slice(1).toLowerCase()}`,
             )
             .join(" ");
-        const content = (
-            await fs.readFile(path.join(inputPageFile.path, inputPageFile.name))
-        ).toString();
+        const content = (await fs.readFile(inputFilePath)).toString();
         const pageHtml = buildPageHtml(
             title,
             content,
@@ -99,10 +104,24 @@ export async function buildPages(options) {
             baseTemplateHtml,
         );
 
-        const outputPagePath = path.join(outDir, `${fileName}.html`);
+        const outputPagePath = path.join(outDir, outputFilePath);
         outputPageWritePs.push(fs.writeFile(outputPagePath, pageHtml));
     }
 
     await Promise.all(outputPageWritePs);
+}
+
+/**
+ * Builds all HTML pages wrapped with the template file.
+ * @param {PagesOptions} options - page build options
+ * @returns {Promise<void>}
+ */
+export async function buildPages(options) {
+    console.log("Building Pages...");
+    const baseTemplateHtml = await getBaseTemplateHtml(options);
+
+    const rootDir = getRootDir();
+    const inputPageDir = path.join(rootDir, "site/pages");
+    await buildPagesInDirectory(baseTemplateHtml, inputPageDir);
     console.log("Finished building Pages");
 }

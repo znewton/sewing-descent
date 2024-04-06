@@ -41,7 +41,10 @@ class FileServer {
         return { found, ext, stream };
     };
     initSocketServer = (server) => {
-        const distFileWatcher = new FileWatcher(getOutputDir());
+        const distFileWatcher = new FileWatcher(
+            getOutputDir(),
+            "FileServerWatcher",
+        );
         const websocketServer = new WebSocketServer({ server });
 
         websocketServer.on("connection", function connection(ws) {
@@ -87,13 +90,19 @@ class FileWatcher extends EventEmitter {
      * @type {AbortController}
      */
     ac = new AbortController();
+    /**
+     * @type {string}
+     */
+    name;
 
     /**
      * @param {string} directory - file directory to watch for changes
+     * @param {string} name - name for console output logs
      */
-    constructor(directory) {
+    constructor(directory, name) {
         super();
         this.directory = directory;
+        this.name = name;
         process.on("exit", () => {
             console.log("Killing file watcher");
             this.ac.abort();
@@ -114,11 +123,14 @@ class FileWatcher extends EventEmitter {
                 });
                 let buffered = false;
                 for await (const event of watcher) {
-                    console.log("Files changed", event);
                     if (buffered === false) {
                         buffered = true;
                         setTimeout(() => {
-                            console.log("Files changed", event);
+                            console.log(
+                                `${this.name}:`,
+                                "Files changed",
+                                event,
+                            );
                             this.emit("change", event);
                             setTimeout(() => {
                                 buffered = false;
@@ -153,7 +165,10 @@ export async function initDevServer() {
  */
 export async function initWatchAndCompile(compileFn) {
     const rootDir = getRootDir();
-    const siteFileWatcher = new FileWatcher(path.join(rootDir, "site"));
+    const siteFileWatcher = new FileWatcher(
+        path.join(rootDir, "site"),
+        "CompilerWatcher",
+    );
     console.log("Initializing Watch and Compile...");
     siteFileWatcher.on("change", () => {
         compileFn().catch(console.error);
