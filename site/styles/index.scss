@@ -58,6 +58,9 @@ a {
     &:hover {
         text-decoration: underline;
     }
+    &[target="_blank"] {
+        position: relative;
+    }
     &[target="_blank"]::after {
         display: inline-block;
         color: var(--action-primary);
@@ -65,8 +68,10 @@ a {
         vertical-align: middle;
         padding-bottom: 0.25em;
         margin-bottom: -0.25em;
-        margin-left: 0.25em;
-        content: "\21D7\FE0E";
+        margin-left: 1em;
+        margin-right: 0.25em;
+        letter-spacing: -0.75em;
+        content: "\0020DE\FE0E \002197\FE0E";
     }
     &.heading-link {
         position: relative;
