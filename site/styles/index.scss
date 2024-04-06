@@ -3,8 +3,8 @@ $mobile-breakpoint: 768px;
 :root {
     --background-primary: #e8e6e0;
     --foreground-primary: #0f0e0d;
-    --background-secondary: #c7beb7;
-    --foreground-secondary: #403d38;
+    --background-secondary: #dbd6d1;
+    --foreground-secondary: #292724;
 
     --background-other: #9c8979;
     --action-primary: #668d3c;
@@ -16,14 +16,14 @@ $mobile-breakpoint: 768px;
     --mobile-breakpoint: $mobile-breakpoint;
 
     --system-ui-font: system-ui, "Segoe UI", Roboto, Helvetica, Arial,
-        sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        sans-serif, "Segoe UI Symbol";
 }
 
 .dark {
     --background-primary: #0f0e0d;
-    --foreground-primary: #f8f6f0;
-    --background-secondary: #403d38;
-    --foreground-secondary: #c7beb7;
+    --foreground-primary: #e8e6e0;
+    --background-secondary: #292724;
+    --foreground-secondary: #dbd6d1;
 }
 
 @font-face {
@@ -46,8 +46,10 @@ body {
     color: var(--foreground-primary);
 }
 
-p {
-    font-family: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif;
+p,
+blockquote {
+    font-family: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif,
+        "Segoe UI Symbol";
 }
 
 a {
@@ -55,6 +57,16 @@ a {
     text-decoration: none;
     &:hover {
         text-decoration: underline;
+    }
+    &[target="_blank"]::after {
+        display: inline-block;
+        color: var(--action-primary);
+        font-size: 0.75em;
+        vertical-align: middle;
+        padding-bottom: 0.25em;
+        margin-bottom: -0.25em;
+        margin-left: 0.25em;
+        content: "\21D7\FE0E";
     }
 }
 
@@ -113,7 +125,7 @@ nav {
 main {
     section {
         margin: 0 auto;
-        padding: 1rem;
+        padding: 0 1rem;
         box-sizing: border-box;
         width: var(--mobile-breakpoint);
     }
@@ -187,6 +199,7 @@ main {
         }
     }
     #mobile-nav-select:checked + nav {
+        // show
         transition:
             visibility 0s,
             opacity var(--nav-menu-transition-duration) ease-in,
@@ -286,6 +299,9 @@ footer {
         box-shadow: 0.5rem 0.5rem 1rem var(--background-primary);
     }
 }
+.symbol {
+    font-family: "Segoe UI Symbol", sans-serif;
+}
 
 .flex-row {
     display: flex;
@@ -316,4 +332,51 @@ footer {
 }
 .no-break {
     white-space: nowrap;
+}
+
+.text-good {
+    color: var(--action-primary);
+}
+.text-bad {
+    color: var(--warning-primary);
+}
+
+blockquote {
+    background-color: var(--background-secondary);
+    color: var(--foreground-secondary);
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0.1rem 0.1rem;
+    padding-left: 2rem;
+    border-left: 2px solid var(--foreground-secondary);
+    figure {
+        margin-left: 0;
+    }
+}
+
+ul {
+    padding-left: 1rem;
+    &.bad-list {
+        list-style: none;
+        li::before {
+            font-family: "Segoe UI Symbol", sans-serif;
+            content: "\01F44E\FE0E";
+            margin-right: 0.25rem;
+            color: var(--warning-primary);
+        }
+    }
+    &.good-list {
+        list-style: none;
+        li {
+            &:not(:last-child) {
+                margin-bottom: 0.25rem;
+            }
+            &::before {
+                font-family: "Segoe UI Symbol", sans-serif;
+                content: "\01F44D\FE0E";
+                margin-right: 0.25rem;
+                color: var(--action-primary);
+            }
+        }
+    }
 }
