@@ -11,7 +11,12 @@
             content="Website to showcase my sewing projects and tutorials"
         />
         <meta name="author" content="Zach Newton" />
-        <link rel="preload" href="/static/punkboy.ttf" />
+        <link
+            rel="preload"
+            href="/static/punkboy.ttf"
+            as="font"
+            type="font/ttf"
+        />
         <style id="no-transition-on-load">
             body * {
                 transition: none !important;
@@ -34,7 +39,7 @@
                 />
                 <nav>
                     <a href="/projects.html">Projects</a>
-                    <a href="/blog/index.html">Blog</a>
+                    <a href="/blog.html">Blog</a>
                     <a href="/about.html">About</a>
                 </nav>
                 <label for="mobile-nav-select" id="mobile-nav-button">
@@ -70,7 +75,7 @@
                 </label>
             </section>
         </header>
-        <main>{{{CONTENT}}}</main>
+        {{{CONTENT}}}
         <footer>
             <section>
                 <a
@@ -124,7 +129,7 @@
             });
             document
                 .querySelectorAll(
-                    `nav a[href="./${document.URL.split("/").slice(-1)[0]}"]`,
+                    `nav a[href="/${document.URL.split("/").slice(-1).join("")}"]`,
                 )
                 .forEach((link) => (link.className += " current-link"));
         </script>

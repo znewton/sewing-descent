@@ -7,7 +7,7 @@ import path from "node:path";
 import { buildPages } from "./pages.js";
 import { buildStyles } from "./styles.js";
 import { exists, getOutputDir, getRootDir } from "./utils.js";
-import { initDevServer, initWatchAndCompile } from "./dev.js";
+import { initDev } from "./dev.js";
 
 /**
  * Make sure root directory is correct.
@@ -90,8 +90,7 @@ async function build() {
     if (mode === "dev") {
         process.env.NODE_ENV = "development";
         await compile();
-        await initDevServer();
-        await initWatchAndCompile(compile);
+        await initDev(compile);
     } else {
         process.env.NODE_ENV = "production";
         await compile();

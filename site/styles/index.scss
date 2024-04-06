@@ -1,3 +1,5 @@
+$mobile-breakpoint: 768px;
+
 :root {
     --background-primary: #e8e6e0;
     --foreground-primary: #0f0e0d;
@@ -10,6 +12,11 @@
 
     --nav-menu-button-transition-duration: 150ms;
     --nav-menu-transition-duration: 200ms;
+
+    --mobile-breakpoint: $mobile-breakpoint;
+
+    --system-ui-font: system-ui, "Segoe UI", Roboto, Helvetica, Arial,
+        sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .dark {
@@ -30,7 +37,8 @@ body {
 }
 
 body {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-family: var(--system-ui-font);
+    font-size: 1em;
     padding: 0;
     margin: 0;
     width: 100%;
@@ -39,11 +47,12 @@ body {
 }
 
 p {
-    font-family: Times, "Times New Roman", Georgia, serif;
+    font-family: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif;
 }
 
 a {
     color: var(--action-primary);
+    text-decoration: none;
     &:hover {
         text-decoration: underline;
     }
@@ -72,7 +81,7 @@ header {
 h1.display {
     margin: 0;
     padding: 0;
-    font-family: punkboy, Verdana, Arial, Helvetica, sans-serif;
+    font-family: punkboy, var(--system-ui-font);
     flex-grow: 1;
     a {
         color: inherit;
@@ -86,7 +95,7 @@ h1.display {
 nav {
     a {
         color: inherit;
-        font-family: punkboy, Verdana, Arial, Helvetica, sans-serif;
+        font-family: punkboy, var(--system-ui-font);
         text-decoration: none;
         font-size: 1.2rem;
         &:not(:first-child) {
@@ -101,12 +110,21 @@ nav {
     }
 }
 
+main {
+    section {
+        margin: 0 auto;
+        padding: 1rem;
+        box-sizing: border-box;
+        width: var(--mobile-breakpoint);
+    }
+}
+
 #mobile-nav-select,
 #mobile-nav-button {
     display: none;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: $mobile-breakpoint) {
     a {
         padding: 1rem;
         margin: -1rem;
@@ -208,6 +226,9 @@ nav {
     }
     main {
         padding-top: 4rem;
+        section {
+            width: 100%;
+        }
     }
 }
 
@@ -226,6 +247,10 @@ footer {
         align-items: center;
         margin-bottom: 0;
         white-space: nowrap;
+        text-decoration: underline;
+        &:hover {
+            color: var(--action-primary);
+        }
         svg {
             margin: 0 0.5rem;
         }
@@ -273,6 +298,17 @@ footer {
 .flex-center {
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+.flex-start {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+}
+.flex-center-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
     align-items: center;
 }
 .text-center {

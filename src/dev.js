@@ -7,8 +7,9 @@ import fs from "node:fs/promises";
 import http from "node:http";
 import path from "node:path";
 import EventEmitter from "node:events";
+import { randomUUID } from "node:crypto";
 import open from "open";
-import { WebSocketServer } from "ws";
+import { WebSocket, WebSocketServer } from "ws";
 import { getOutputDir, getRootDir } from "./utils.js";
 
 const DEV_PORT = 4567;
@@ -28,6 +29,10 @@ class FileServer {
     };
     STATIC_PATH = getOutputDir();
     toBool = [() => true, () => false];
+    /**
+     * @type {Record<string, WebSocket>}
+     */
+    connections = {};
     prepareFile = async (url) => {
         const paths = [this.STATIC_PATH, url];
         if (url.endsWith("/")) paths.push("index.html");
@@ -41,25 +46,24 @@ class FileServer {
         return { found, ext, stream };
     };
     initSocketServer = (server) => {
-        const distFileWatcher = new FileWatcher(
-            getOutputDir(),
-            "FileServerWatcher",
-        );
         const websocketServer = new WebSocketServer({ server });
 
-        websocketServer.on("connection", function connection(ws) {
-            const fileChangeListener = () => {
-                ws.send("reload");
-            };
+        websocketServer.on("connection", (ws) => {
+            const connectionId = randomUUID();
+            this.connections[connectionId] = ws;
             ws.on("close", () => {
-                distFileWatcher.off("change", fileChangeListener);
+                delete this.connections[connectionId];
             });
-            distFileWatcher.on("change", fileChangeListener);
         });
         process.on("exit", () => {
             console.log("Killing hot reload server");
             websocketServer.close();
         });
+    };
+    reload = () => {
+        for (const ws of Object.values(this.connections)) {
+            ws.send("reload");
+        }
     };
     handleHttpRequest = async (req, res) => {
         const file = await this.prepareFile(req.url);
@@ -69,11 +73,24 @@ class FileServer {
         file.stream.pipe(res);
         console.log(`${req.method} ${req.url} ${statusCode}`);
     };
-    start = () => {
-        const server = http
-            .createServer(this.handleHttpRequest.bind(this))
-            .listen(DEV_PORT);
-        this.initSocketServer(server);
+    /**
+     *
+     * @param {number} port - port for the server to listen on
+     * @returns {Promise<FileServer>} - the file server instance
+     */
+    start = (port) => {
+        return new Promise((resolve, reject) => {
+            const server = http
+                .createServer(this.handleHttpRequest.bind(this))
+                .listen(port, (err) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    this.initSocketServer(server);
+                    open(`http://localhost:${port}`);
+                    resolve(this);
+                });
+        });
     };
 }
 
@@ -90,19 +107,13 @@ class FileWatcher extends EventEmitter {
      * @type {AbortController}
      */
     ac = new AbortController();
-    /**
-     * @type {string}
-     */
-    name;
 
     /**
      * @param {string} directory - file directory to watch for changes
-     * @param {string} name - name for console output logs
      */
-    constructor(directory, name) {
+    constructor(directory) {
         super();
         this.directory = directory;
-        this.name = name;
         process.on("exit", () => {
             console.log("Killing file watcher");
             this.ac.abort();
@@ -126,11 +137,6 @@ class FileWatcher extends EventEmitter {
                     if (buffered === false) {
                         buffered = true;
                         setTimeout(() => {
-                            console.log(
-                                `${this.name}:`,
-                                "Files changed",
-                                event,
-                            );
                             this.emit("change", event);
                             setTimeout(() => {
                                 buffered = false;
@@ -148,29 +154,26 @@ class FileWatcher extends EventEmitter {
 }
 
 /**
- * Initialize hot reload dev server.
- * @returns {Promise<void>} callback to shutdown the server.
- */
-export async function initDevServer() {
-    console.log("Initializing Dev server...");
-    const fileServer = new FileServer();
-    fileServer.start();
-    console.log(`Dev server listening on http://localhost:${DEV_PORT}`);
-    open(`http://localhost:${DEV_PORT}`);
-}
-
-/**
  * Compile the site and recompile whenever source files change.
  * @param {() => Promise<void>} compileFn - Function that compiles the site when called.
  */
-export async function initWatchAndCompile(compileFn) {
-    const rootDir = getRootDir();
-    const siteFileWatcher = new FileWatcher(
-        path.join(rootDir, "site"),
-        "CompilerWatcher",
-    );
+export async function initDev(compileFn) {
     console.log("Initializing Watch and Compile...");
+    const rootDir = getRootDir();
+    const siteFileWatcher = new FileWatcher(path.join(rootDir, "site"));
+    const fileServer = new FileServer();
+    await fileServer.start(DEV_PORT).then(() => {
+        console.log(`Dev server listening on http://localhost:${DEV_PORT}`);
+    });
     siteFileWatcher.on("change", () => {
-        compileFn().catch(console.error);
+        console.log("File change detected.");
+        console.clear();
+        console.log("Recompiling...");
+        compileFn()
+            .then(() => {
+                console.log("Recompiled. Reloading...");
+                fileServer.reload();
+            })
+            .catch(console.error);
     });
 }

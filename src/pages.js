@@ -46,7 +46,7 @@ function buildPageHtml(title, content, contentType, baseTemplateHtml) {
     const parsedContent =
         contentType === "html"
             ? content
-            : new showdown.Converter().makeHtml(content);
+            : `<main class="flex-center-column"><section class="flex-column flex-start">${new showdown.Converter().makeHtml(content)}</section></main>`;
     return baseTemplateHtml
         .replace("{{{TITLE}}}", title === "Index" ? "Home" : title)
         .replace("{{{CONTENT}}}", parsedContent);
