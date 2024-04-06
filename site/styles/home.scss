@@ -8,9 +8,9 @@ main {
 header {
     background-color: var(--background-primary);
     box-shadow:
-        0px 1rem 1rem var(--background-primary),
-        0px 2rem 2rem var(--background-primary),
-        0px 3rem 3rem var(--background-primary);
+        0px 0.5rem 1rem var(--background-primary),
+        0px 0.75rem 1.5rem var(--background-primary),
+        0px 1rem 2rem var(--background-primary);
     border-bottom: none;
 }
 main section {
@@ -73,14 +73,6 @@ main section.cover {
             transparent
         );
     }
-    // #learn-more {
-    //     &:before,
-    //     &:after {
-    //         content: "\2304";
-    //         padding: 0 1rem;
-    //         text-decoration: none !important;
-    //     }
-    // }
 }
 main section:nth-of-type(2) {
     margin-top: 2rem;
@@ -93,5 +85,6 @@ main section:nth-of-type(2) {
 }
 
 footer {
+    border-top: none;
     background-color: var(--background-primary);
 }

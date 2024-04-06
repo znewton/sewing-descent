@@ -8,7 +8,7 @@
         { "source": "/", "destination": "/index.html" },
         { "source": "/index", "destination": "/index.html" },
         { "source": "/about", "destination": "/about.html" },
-        { "source": "/blog", "destination": "/blog/index.html" },
+        { "source": "/blog", "destination": "/blog.html" },
         {
             "source": "/projects",
             "destination": "/projects.html"

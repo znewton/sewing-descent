@@ -11,6 +11,12 @@
             content="Website to showcase my sewing projects and tutorials"
         />
         <meta name="author" content="Zach Newton" />
+        <link rel="preload" href="/static/punkboy.ttf" />
+        <style id="no-transition-on-load">
+            body * {
+                transition: none !important;
+            }
+        </style>
     </head>
     <body>
         <link rel="stylesheet" href="/styles/index.css" />
@@ -28,7 +34,6 @@
                 />
                 <nav>
                     <a href="/projects.html">Projects</a>
-                    <a href="/tutorials.html">Tutorials</a>
                     <a href="/blog/index.html">Blog</a>
                     <a href="/about.html">About</a>
                 </nav>
@@ -105,7 +110,7 @@
                 </a>
             </section>
             <section>
-                <span
+                <span class="no-break"
                     >Made with &#x2764; by&nbsp;
                     <a href="https://github.com/znewton/sewing-descent"
                         >Zach</a
@@ -114,6 +119,9 @@
             </section>
         </footer>
         <script>
+            window.addEventListener("load", () => {
+                document.getElementById("no-transition-on-load").remove();
+            });
             document
                 .querySelectorAll(
                     `nav a[href="./${document.URL.split("/").slice(-1)[0]}"]`,
