@@ -1,46 +1,44 @@
 {
-    "name": "sewing-descent",
-    "version": "0.0.1",
-    "description": "Website for my sewing projects",
-    "main": "index.js",
-    "type": "module",
-    "scripts": {
-        "start": "node ./src/index.js --dev",
-        "build": "node ./src/index.js",
-        "build:ci": "./setup.sh && npm run build",
-        "lint": "eslint .",
-        "lint:fix": "eslint --fix .",
-        "format": "prettier . --write"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/znewton/sewing-descent.git"
-    },
-    "keywords": [
-        "sewing",
-        "javascript",
-        "typescript",
-        "markdown",
-        "static",
-        "html",
-        "css"
-    ],
-    "author": "znewton",
-    "license": "GPL-3.0-or-later",
-    "bugs": {
-        "url": "https://github.com/znewton/sewing-descent/issues"
-    },
-    "homepage": "https://github.com/znewton/sewing-descent#readme",
-    "devDependencies": {
-        "eslint": "^8.56.0",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-jsdoc": "^48.0.2",
-        "nodemon": "^3.0.3",
-        "open": "^10.1.0",
-        "prettier": "^3.2.4",
-        "sass": "^1.72.0",
-        "showdown": "^2.1.0",
-        "tar": "^6.2.1",
-        "ws": "^8.16.0"
-    }
+	"name": "sewing-descent",
+	"version": "0.0.1",
+	"description": "Website for my sewing projects",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"start": "node ./src/index.js --dev",
+		"build": "node ./src/index.js",
+		"build:ci": "./setup.sh && npm run build",
+		"lint": "biome check .",
+		"lint:fix": "biome check --apply .",
+		"format": "biome format . --write && prettier --write ./site"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/znewton/sewing-descent.git"
+	},
+	"keywords": [
+		"sewing",
+		"javascript",
+		"typescript",
+		"markdown",
+		"static",
+		"html",
+		"css"
+	],
+	"author": "znewton",
+	"license": "GPL-3.0-or-later",
+	"bugs": {
+		"url": "https://github.com/znewton/sewing-descent/issues"
+	},
+	"homepage": "https://github.com/znewton/sewing-descent#readme",
+	"devDependencies": {
+		"@biomejs/biome": "^1.6.4",
+		"nodemon": "^3.0.3",
+		"open": "^10.1.0",
+		"prettier": "^3.2.5",
+		"sass": "^1.72.0",
+		"showdown": "^2.1.0",
+		"tar": "^6.2.1",
+		"ws": "^8.16.0"
+	}
 }

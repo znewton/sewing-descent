@@ -1,22 +1,22 @@
 {
-    "buildCommand": "npm run build:ci",
-    "installCommand": "npm install",
-    "devCommand": "npm start",
-    "framework": null,
-    "outputDirectory": "dist",
-    "rewrites": [
-        { "source": "/", "destination": "/index.html" },
-        { "source": "/index", "destination": "/index.html" },
-        { "source": "/about", "destination": "/about.html" },
-        { "source": "/blog", "destination": "/blog.html" },
-        {
-            "source": "/projects",
-            "destination": "/projects.html"
-        },
-        {
-            "source": "/tutorials",
-            "destination": "/tutorials.html"
-        }
-    ],
-    "trailingSlash": false
+	"buildCommand": "npm run build:ci",
+	"installCommand": "npm install",
+	"devCommand": "npm start",
+	"framework": null,
+	"outputDirectory": "dist",
+	"rewrites": [
+		{ "source": "/", "destination": "/index.html" },
+		{ "source": "/index", "destination": "/index.html" },
+		{ "source": "/about", "destination": "/about.html" },
+		{ "source": "/blog", "destination": "/blog.html" },
+		{
+			"source": "/projects",
+			"destination": "/projects.html"
+		},
+		{
+			"source": "/tutorials",
+			"destination": "/tutorials.html"
+		}
+	],
+	"trailingSlash": false
 }

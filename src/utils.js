@@ -2,22 +2,22 @@
  * Various utility functions.
  */
 
-import path from "node:path";
 import fs from "node:fs/promises";
+import path from "node:path";
 
 /**
  * @returns {string} string path to the project's root directory.
  */
 export function getRootDir() {
-    const rootDir = process.cwd();
-    return rootDir;
+	const rootDir = process.cwd();
+	return rootDir;
 }
 
 /**
  * @returns {string} string path to `dist` directory in root project folder.
  */
 export function getOutputDir() {
-    return path.join(getRootDir(), "/dist");
+	return path.join(getRootDir(), "/dist");
 }
 
 /**
@@ -27,18 +27,19 @@ export function getOutputDir() {
  * @returns {Promise<boolean>} whether the filesystem entry exists
  */
 export async function exists(path, expectedType) {
-    try {
-        const stat = await fs.stat(path);
-        if (expectedType === "directory") {
-            return stat.isDirectory();
-        } else if (expectedType === "file") {
-            return stat.isFile();
-        }
-        return true;
-    } catch (error) {
-        if (error.code === "ENOENT") {
-            return false;
-        }
-        throw error;
-    }
+	try {
+		const stat = await fs.stat(path);
+		if (expectedType === "directory") {
+			return stat.isDirectory();
+		}
+		if (expectedType === "file") {
+			return stat.isFile();
+		}
+		return true;
+	} catch (error) {
+		if (error.code === "ENOENT") {
+			return false;
+		}
+		throw error;
+	}
 }
