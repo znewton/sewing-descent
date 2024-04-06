@@ -20,10 +20,11 @@ for (const heading of document.querySelectorAll(
 	headingLevels.map((lvl) => `h${lvl}[id]`).join(", "),
 )) {
 	const headingLink = document.createElement("a");
-	headingLink.setAttribute("href", `#${headingLink.getAttribute("id")}`);
+	headingLink.setAttribute("href", `#${heading.getAttribute("id")}`);
+	headingLink.className = "heading-link";
 	for (const childNode of heading.childNodes) {
-		headingLink.appendChild(childNode);
 		heading.removeChild(childNode);
+		headingLink.appendChild(childNode);
 	}
 	heading.appendChild(headingLink);
 }

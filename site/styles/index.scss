@@ -68,6 +68,26 @@ a {
         margin-left: 0.25em;
         content: "\21D7\FE0E";
     }
+    &.heading-link {
+        position: relative;
+        color: inherit;
+        &::before {
+            font-style: italic;
+            content: "#";
+            color: var(--action-primary);
+            text-decoration: underline;
+            visibility: hidden;
+            position: absolute;
+            right: calc(100% + 0.5rem);
+            opacity: 0.5;
+        }
+        &:hover {
+            text-decoration: underline;
+            &::before {
+                visibility: visible;
+            }
+        }
+    }
 }
 
 header {

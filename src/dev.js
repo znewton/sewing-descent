@@ -71,7 +71,7 @@ class FileServer {
 		const mimeType = this.MIME_TYPES[file.ext] || this.MIME_TYPES.default;
 		res.writeHead(statusCode, { "Content-Type": mimeType });
 		file.stream.pipe(res);
-		console.log(`${req.method} ${req.url} ${statusCode}`);
+		console.debug(`${req.method} ${req.url} ${statusCode}`);
 	};
 	/**
 	 *
@@ -115,7 +115,7 @@ class FileWatcher extends EventEmitter {
 		super();
 		this.directory = directory;
 		process.on("exit", () => {
-			console.log("Killing file watcher");
+			console.debug("Killing file watcher");
 			this.ac.abort();
 		});
 		this.init();
@@ -166,7 +166,7 @@ export async function initDev(compileFn) {
 		console.log(`Dev server listening on http://localhost:${DEV_PORT}`);
 	});
 	siteFileWatcher.on("change", () => {
-		console.log("File change detected.");
+		console.debug("File change detected.");
 		console.clear();
 		console.log("Recompiling...");
 		compileFn()

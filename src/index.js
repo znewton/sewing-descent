@@ -9,6 +9,7 @@ import { buildPages } from "./pages.js";
 import { buildStyles } from "./styles.js";
 import { exists, getOutputDir, getRootDir } from "./utils.js";
 import { minifyOutputFiles } from "./optimize.js";
+import { buildScripts } from "./scripts.js";
 
 /**
  * Make sure root directory is correct.
@@ -82,6 +83,9 @@ async function build() {
 		Promise.all([
 			copyStaticFiles().catch((error) => {
 				console.error("Error copying static files", error);
+			}),
+			buildScripts().catch((error) => {
+				console.error("Error building scripts", error);
 			}),
 			buildStyles().catch((error) => {
 				console.error("Error building styles", error);
