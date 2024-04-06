@@ -92,6 +92,10 @@ nav {
 }
 
 @media only screen and (max-width: 768px) {
+    a {
+        padding: 1rem;
+        margin: -1rem;
+    }
     header {
         position: fixed;
         z-index: 2;
@@ -160,11 +164,9 @@ footer {
     a.social-link {
         display: flex;
         align-items: center;
+        padding: 0.5rem;
         svg {
             margin: 0 0.5rem;
-        }
-        &:not(:last-child) {
-            margin-bottom: 0.5rem;
         }
     }
     section {
