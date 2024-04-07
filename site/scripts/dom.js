@@ -9,7 +9,7 @@ window.addEventListener(
 
 // Assign a visual cue to the nav links to show what page is shown.
 for (const navLink of document.querySelectorAll(
-	`nav a[href="/${document.URL.split("/").slice(-1).join("")}"]`,
+	`nav a[href="${new URL(document.URL).pathname}"]`,
 )) {
 	navLink.className += " current-link";
 }

@@ -1,14 +1,16 @@
 $mobile-breakpoint: 768px;
 
 :root {
-    --background-primary: #e8e6e0;
+    --background-primary: #f8f6f0;
     --foreground-primary: #0f0e0d;
-    --background-secondary: #dbd6d1;
+    --background-secondary: #dbdad8;
     --foreground-secondary: #292724;
 
     --background-other: #9c8979;
-    --action-primary: #668d3c;
+    // favorite green: #668d3c (not accessible)
+    --action-primary: #165d09;
     --warning-primary: #8f3b1b;
+    --link: #165d09;
 
     --nav-menu-button-transition-duration: 150ms;
     --nav-menu-transition-duration: 200ms;
@@ -21,9 +23,11 @@ $mobile-breakpoint: 768px;
 
 .dark {
     --background-primary: #0f0e0d;
-    --foreground-primary: #e8e6e0;
+    --foreground-primary: #f8f6f0;
     --background-secondary: #292724;
-    --foreground-secondary: #dbd6d1;
+    --foreground-secondary: #dbdad8;
+    --action-primary: #77ab3f;
+    --link: #77ab3f;
 }
 
 @font-face {
@@ -45,15 +49,22 @@ body {
     background-color: var(--background-primary);
     color: var(--foreground-primary);
 }
-
+hr {
+    width: 100%;
+    color: var(--background-secondary);
+    border: none;
+    border-bottom: 1px solid;
+}
 p,
-blockquote {
+blockquote,
+ul,
+ol {
     font-family: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif,
         "Segoe UI Symbol";
 }
 
 a {
-    color: var(--action-primary);
+    color: var(--link);
     text-decoration: none;
     &:hover {
         text-decoration: underline;
@@ -63,11 +74,11 @@ a {
     }
     &[target="_blank"]::after {
         display: inline-block;
-        color: var(--action-primary);
+        color: var(--link);
         font-size: 0.75em;
         margin-left: 0.25em;
         transform: rotate(-90deg);
-        content: '\0021AA\FE0E';
+        content: "\0021AA\FE0E";
     }
     &.heading-link {
         position: relative;
@@ -75,7 +86,7 @@ a {
         &::before {
             font-style: italic;
             content: "#";
-            color: var(--action-primary);
+            color: var(--link);
             text-decoration: underline;
             visibility: hidden;
             position: absolute;
@@ -135,7 +146,7 @@ nav {
             padding-left: 1rem;
         }
         &.current-link {
-            color: var(--action-primary);
+            color: var(--link);
         }
         &:hover {
             text-decoration: underline;
@@ -283,7 +294,7 @@ footer {
         margin-bottom: 0;
         white-space: nowrap;
         &:hover {
-            color: var(--action-primary);
+            color: var(--link);
         }
         svg {
             margin: 0 0.5rem;
@@ -376,7 +387,8 @@ blockquote {
     }
 }
 
-ul {
+ul,
+ol {
     &.bad-list,
     &.good-list {
         padding-left: 1rem;

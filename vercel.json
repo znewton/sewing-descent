@@ -9,6 +9,7 @@
 		{ "source": "/index", "destination": "/index.html" },
 		{ "source": "/about", "destination": "/about.html" },
 		{ "source": "/blog", "destination": "/blog.html" },
+		{ "source": "/faq", "destination": "/faq.html" },
 		{
 			"source": "/projects",
 			"destination": "/projects.html"
