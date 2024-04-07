@@ -65,13 +65,9 @@ a {
         display: inline-block;
         color: var(--action-primary);
         font-size: 0.75em;
-        vertical-align: middle;
-        padding-bottom: 0.25em;
-        margin-bottom: -0.25em;
-        margin-left: 1em;
-        margin-right: 0.25em;
-        letter-spacing: -0.75em;
-        content: "\0020DE\FE0E \002197\FE0E";
+        margin-left: 0.25em;
+        transform: rotate(-90deg);
+        content: '\0021AA\FE0E';
     }
     &.heading-link {
         position: relative;
@@ -367,11 +363,12 @@ footer {
 }
 
 blockquote {
+    box-sizing: border-box;
     background-color: var(--background-secondary);
     color: var(--foreground-secondary);
     margin-left: 0;
     margin-right: 0;
-    padding: 0.1rem 0.1rem;
+    padding: 0.1rem 1rem;
     padding-left: 2rem;
     border-left: 2px solid var(--foreground-secondary);
     figure {
@@ -380,9 +377,9 @@ blockquote {
 }
 
 ul {
-    padding-left: 1rem;
     &.bad-list,
     &.good-list {
+        padding-left: 1rem;
         list-style: none;
         li {
             &:not(:last-child) {
