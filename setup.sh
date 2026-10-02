@@ -1,18 +1,8 @@
-echo "Downloading fonts..."
+#!/usr/bin/env sh
+set -eu
 
-mkdir -p tmp
-(
-    cd tmp
-    curl "https://dl.dafont.com/dl/?f=punkboy" -L -o punkboy.zip
-    unzip punkboy.zip
-)
-mkdir -p static
-cp tmp/punkboy_tbs.ttf static/punkboy.ttf
+echo "Installing dependencies (npm ci)..."
 
-rm -rf tmp
-
-echo "Installing dependencies..."
-
-npm install
+npm ci
 
 echo "Setup complete!"

@@ -5,11 +5,12 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { initDev } from "./dev.js";
+import { minifyOutputFiles } from "./optimize.js";
 import { buildPages } from "./pages.js";
+import { buildScripts } from "./scripts.js";
 import { buildStyles } from "./styles.js";
 import { exists, getOutputDir, getRootDir } from "./utils.js";
-import { minifyOutputFiles } from "./optimize.js";
-import { buildScripts } from "./scripts.js";
+import { ensureWordmarkFont } from "./wordmark.js";
 
 /**
  * Make sure root directory is correct.
@@ -71,6 +72,7 @@ async function copyStaticFiles() {
  */
 async function build() {
 	await validateRootDir();
+	await ensureWordmarkFont();
 	await createCleanOutputDir();
 
 	if (!process.argv.includes("--verbose")) {
@@ -78,22 +80,36 @@ async function build() {
 	}
 
 	const mode = process.argv.includes("--dev") ? "dev" : "prod";
+	const preview = process.argv.includes("--preview");
 
-	const compile = async () =>
-		Promise.all([
-			copyStaticFiles().catch((error) => {
-				console.error("Error copying static files", error);
-			}),
-			buildScripts().catch((error) => {
-				console.error("Error building scripts", error);
-			}),
-			buildStyles().catch((error) => {
-				console.error("Error building styles", error);
-			}),
-			buildPages({ hotReload: mode === "dev" }).catch((error) => {
-				console.error("Error building pages", error);
-			}),
-		]);
+	/**
+	 * Run every build step and collect failures instead of letting an
+	 * individual step's error be swallowed: any rejection must fail the
+	 * overall build with a nonzero exit code.
+	 */
+	const compile = async () => {
+		const steps = [
+			{ name: "static files", run: copyStaticFiles() },
+			{ name: "scripts", run: buildScripts() },
+			{ name: "styles", run: buildStyles() },
+			{
+				name: "pages",
+				run: buildPages({ hotReload: mode === "dev", preview }),
+			},
+		];
+		const results = await Promise.allSettled(steps.map((step) => step.run));
+		const failures = results
+			.map((result, index) => ({ result, name: steps[index].name }))
+			.filter(({ result }) => result.status === "rejected");
+		for (const failure of failures) {
+			console.error(`Error building ${failure.name}:`, failure.result.reason);
+		}
+		if (failures.length > 0) {
+			throw new Error(
+				`Build failed: ${failures.map((failure) => failure.name).join(", ")}.`,
+			);
+		}
+	};
 	if (mode === "dev") {
 		process.env.NODE_ENV = "development";
 		await compile();

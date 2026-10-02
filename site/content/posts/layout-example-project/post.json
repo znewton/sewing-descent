@@ -1,0 +1,16 @@
+{
+	"title": "Layout Example: Project Entry",
+	"date": "2026-01-01",
+	"summary": "Project layout with a cover photo.",
+	"type": "project",
+	"tags": ["layout-example"],
+	"status": "draft",
+	"layoutExample": true,
+	"cover": {
+		"src": "/static/imgs/sewing-descent-cover_small.webp",
+		"alt": "A tent and campfire among trees at night.",
+		"width": 640,
+		"height": 918,
+		"caption": "Example cover photo."
+	}
+}

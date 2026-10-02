@@ -1,0 +1,9 @@
+{
+	"title": "Layout Example: Technique Entry",
+	"date": "2026-01-02",
+	"summary": "Technique layout without a cover photo.",
+	"type": "technique",
+	"tags": ["layout-example"],
+	"status": "draft",
+	"layoutExample": true
+}

@@ -4,13 +4,19 @@
 	"description": "Website for my sewing projects",
 	"main": "index.js",
 	"type": "module",
+	"engines": {
+		"node": ">=20"
+	},
 	"scripts": {
 		"start": "node ./src/index.js --dev",
+		"start:preview": "node ./src/index.js --dev --preview",
 		"build": "node ./src/index.js",
-		"build:ci": "./setup.sh && npm run build",
+		"build:preview": "node ./src/index.js --preview",
+		"build:ci": "npm ci && npm run build",
 		"lint": "biome check .",
 		"lint:fix": "biome check --apply .",
-		"format": "biome format . --write && prettier --write ./site"
+		"format": "biome format . --write && prettier --write ./site",
+		"test": "node --test \"tests/**/*.test.mjs\""
 	},
 	"repository": {
 		"type": "git",
@@ -33,11 +39,13 @@
 	"homepage": "https://github.com/znewton/sewing-descent#readme",
 	"devDependencies": {
 		"@biomejs/biome": "^1.6.4",
+		"fflate": "^0.8.2",
 		"minify": "^11.1.1",
 		"nodemon": "^3.0.3",
 		"open": "^10.1.0",
 		"prettier": "^3.2.5",
 		"sass": "^1.72.0",
+		"sharp": "^0.35.5",
 		"showdown": "^2.1.0",
 		"tar": "^6.2.1",
 		"try-to-catch": "^3.0.1",

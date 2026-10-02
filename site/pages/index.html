@@ -1,39 +1,78 @@
 <main>
-    <section class="cover">
-        <picture class="cover-image">
-            <!-- Image sourced from https://unsplash.com/photos/person-sitting-near-bonfire-surrounded-by-trees-1azAjl8FTnU -->
-            <source
-                srcset="/static/imgs/sewing-descent-cover_small.webp"
-                media="only screen and (max-width: 640px)"
-            />
-            <source
-                srcset="/static/imgs/sewing-descent-cover_medium.webp"
-                media="only screen and (min-width: 641px) and (max-width: 1920px)"
-            />
-            <source
-                srcset="/static/imgs/sewing-descent-cover_large.webp"
-                media="only screen and (min-width: 1921px) and (max-width: 2400px)"
-            />
-            <source
-                srcset="/static/imgs/sewing-descent-cover_original.webp"
-                media="only screen and (min-width: 3437px)"
-            />
-            <img
-                src="/static/imgs/sewing-descent-cover_small.webp"
-                alt="A night time camping scene"
-            />
-        </picture>
-        <h2>
-            <span class="font-heavy">Heavier on you,</span><br /><span
-                class="font-light"
-                >Lighter on the planet</span
-            >
-        </h2>
-        <a class="button" id="learn-more" href="/about.html">Learn more</a>
+    <section class="hero">
+        <p class="hero-eyebrow eyebrow">Seattle, WA</p>
+        <h1 class="hero-slogan">
+            <span class="font-heavy">Heavier on you,</span>
+            <span class="font-light">lighter on the planet</span>
+        </h1>
+        <a class="button hero-cta" id="learn-more" href="/about.html"
+            >Learn more</a
+        >
+        <figure class="hero-figure">
+            <picture class="cover-image">
+                <!-- Image sourced from https://unsplash.com/photos/person-sitting-near-bonfire-surrounded-by-trees-1azAjl8FTnU -->
+                <source
+                    srcset="/static/imgs/sewing-descent-cover_small.webp"
+                    media="only screen and (max-width: 640px)"
+                />
+                <source
+                    srcset="/static/imgs/sewing-descent-cover_desktop.webp"
+                    media="only screen and (min-width: 641px) and (max-width: 1920px)"
+                />
+                <source
+                    srcset="/static/imgs/sewing-descent-cover_large.webp"
+                    media="only screen and (min-width: 1921px) and (max-width: 3436px)"
+                />
+                <source
+                    srcset="/static/imgs/sewing-descent-cover_original.webp"
+                    media="only screen and (min-width: 3437px)"
+                />
+                <img
+                    src="/static/imgs/sewing-descent-cover_small.webp"
+                    alt="A night time camping scene, firelight glowing among dark trees"
+                    width="640"
+                    height="918"
+                    fetchpriority="high"
+                />
+            </picture>
+            <figcaption class="hero-caption">
+                <span class="photo-credit"
+                    >Photo:
+                    <a
+                        href="https://unsplash.com/photos/person-sitting-near-bonfire-surrounded-by-trees-1azAjl8FTnU"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Unsplash</a
+                    ></span
+                >
+            </figcaption>
+        </figure>
     </section>
 
-    <link rel="stylesheet" href="styles/home.css" />
-    <script>
-        document.getElementsByTagName("body")[0].classList.add("dark");
-    </script>
+    <section class="home-section home-mission flex-column flex-start prose">
+        <h2>Principles</h2>
+        <ol class="rule-summary">
+            <li>
+                <span class="rule-number">01</span>
+                <a href="/about.html#refuse">Refuse</a>
+            </li>
+            <li>
+                <span class="rule-number">02</span>
+                <a href="/about.html#repair">Repair</a>
+            </li>
+            <li>
+                <span class="rule-number">03</span>
+                <a href="/about.html#repurpose">Repurpose</a>
+            </li>
+        </ol>
+        <p><a class="button" href="/about.html">Read the full mission</a></p>
+    </section>
+
+    <section
+        class="home-section home-journal-preview flex-column flex-start prose"
+    >
+        <h2>From the Journal</h2>
+        {{{JOURNAL_PREVIEW}}}
+        <p><a href="/journal.html">Visit the Journal &rarr;</a></p>
+    </section>
 </main>

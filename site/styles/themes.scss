@@ -1,0 +1,223 @@
+/* Theme alternatives are linked only in preview builds. */
+
+/* ---------- Workshop: olive/cream utilitarian maker's notebook ---------- */
+/* `html[data-theme=...]` (not just `[data-theme=...]`) so these custom
+ * property overrides reliably beat the `:root` defaults in index.scss
+ * regardless of stylesheet load order (both are otherwise equal
+ * specificity, and :root is also just `html` under the hood). */
+html[data-theme="workshop"] {
+    --background-primary: #f3efe0;
+    --foreground-primary: #2b2e1f;
+    --background-secondary: #dfdcc3;
+    --foreground-secondary: #44492f;
+    --action-primary: #55602f;
+    --warning-primary: #8a3e22;
+    --link: #55602f;
+    /* Expressive grotesk headline font, explicitly NOT the mono stack;
+     * mono stays reserved for labels/meta (nav, tags, dates) below. */
+    --display-font: "Futura", "Century Gothic", "URW Gothic", Avenir,
+        var(--system-ui-font);
+    --measure: 34rem;
+    --space-section: 2rem;
+    --space-card: 1rem;
+    --radius: 0.2rem;
+
+    body {
+        background-image: repeating-linear-gradient(
+            to bottom,
+            transparent,
+            transparent 2.4rem,
+            rgba(43, 46, 31, 0.035) 2.4rem,
+            rgba(43, 46, 31, 0.035) 2.45rem
+        );
+    }
+    body > header {
+        border-bottom: 2px dashed var(--foreground-secondary);
+    }
+    .display {
+        color: var(--link);
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        font-weight: 800;
+    }
+    header nav a {
+        font-family: var(--mono-font);
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.04em;
+    }
+    .button {
+        border-radius: 0.2rem;
+        border-width: 2px;
+    }
+    .journal-card,
+    details.material-detail,
+    .direction-card {
+        border-radius: 0.2rem;
+        border: 2px solid var(--foreground-secondary);
+        border-style: dashed;
+    }
+    /* .principle-card is a full-width stacked rule row (not a boxed
+     * card), so only its existing top/bottom rule lines switch to the
+     * stitched dashed style rather than gaining side borders. */
+    .principle-card {
+        border-top-width: 2px;
+        border-top-style: dashed;
+        &:last-child {
+            border-bottom-width: 2px;
+            border-bottom-style: dashed;
+        }
+    }
+    .content-index {
+        border-radius: 0.2rem;
+        border: 2px dashed var(--foreground-secondary);
+    }
+
+    /* Rail items read as one connected "maker's notebook" margin
+     * column via a shared stitch-style left rule. */
+    .hero-eyebrow,
+    .hero-cta {
+        padding-left: 0.9rem;
+        border-left: 2px dashed var(--foreground-secondary);
+    }
+    .hero-eyebrow {
+        font-weight: 700;
+    }
+    .hero-slogan .font-heavy {
+        color: var(--link);
+    }
+    .hero-figure {
+        border-radius: 0.2rem;
+    }
+}
+
+@media only screen and (min-width: 960px) {
+    /* Desktop-only: left context/mission rail, wider right column
+     * stacking the title above a landscape photo strip. */
+    html[data-theme="workshop"] .hero {
+        grid-template-columns: 14rem minmax(0, 1fr);
+        grid-template-rows: auto auto 1fr auto;
+        grid-template-areas:
+            "eyebrow slogan"
+            "cta     slogan"
+            ".       figure"
+            ".       caption";
+        column-gap: 2rem;
+    }
+    html[data-theme="workshop"] .hero-slogan {
+        align-self: start;
+        font-size: 2.6rem;
+    }
+    html[data-theme="workshop"] .hero-figure {
+        aspect-ratio: 16 / 9;
+        align-self: start;
+    }
+}
+
+/* ---------- Nightfall: near-black/cream/rust atmospheric ---------- */
+html[data-theme="nightfall"] {
+    --background-primary: #121011;
+    --foreground-primary: #f1e9d8;
+    --background-secondary: #231f1d;
+    --foreground-secondary: #cfc3ad;
+    /* #d9814c: >=4.5:1 contrast on --background-secondary (WCAG AA). */
+    --action-primary: #d9814c;
+    --warning-primary: #e4875a;
+    --link: #d9814c;
+    --display-font: "Arial Black", var(--system-ui-font);
+    --measure: 36rem;
+    --space-section: 3.5rem;
+    --space-card: 1.5rem;
+    --radius: 0.75rem;
+
+    .display {
+        color: var(--link);
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        font-size: 1.75rem;
+        text-transform: uppercase;
+    }
+    h2 {
+        letter-spacing: -0.01em;
+    }
+    .hero-slogan .font-heavy {
+        color: var(--link);
+    }
+    .principle-card,
+    .journal-card,
+    .direction-card {
+        background: var(--background-secondary);
+        border: 1px solid rgba(241, 233, 216, 0.15);
+    }
+    .content-index {
+        background: var(--background-secondary);
+        border-color: rgba(241, 233, 216, 0.15);
+    }
+    blockquote {
+        background: var(--background-secondary);
+        border-left-color: var(--action-primary);
+    }
+    footer {
+        border-top-color: rgba(241, 233, 216, 0.14);
+        opacity: 0.92;
+    }
+}
+
+@media only screen and (min-width: 640px) {
+    /* Full-bleed photo stage with a dark gradient scrim and a
+     * left-aligned headline on top. Below this breakpoint the base
+     * stacked layout (recolored) is kept so small phones stay simple. */
+    html[data-theme="nightfall"] .hero {
+        position: relative;
+        display: block;
+        min-height: 30rem;
+        padding: 0;
+    }
+    html[data-theme="nightfall"] .hero-figure {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        aspect-ratio: auto;
+        border-radius: 0;
+        margin: 0;
+    }
+    html[data-theme="nightfall"] .hero-figure::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            100deg,
+            rgba(8, 6, 5, 0.92) 0%,
+            rgba(8, 6, 5, 0.6) 40%,
+            rgba(8, 6, 5, 0) 72%
+        );
+    }
+    html[data-theme="nightfall"] .hero-eyebrow,
+    html[data-theme="nightfall"] .hero-slogan,
+    html[data-theme="nightfall"] .hero-cta {
+        position: relative;
+        z-index: 1;
+        max-width: 30rem;
+        margin-left: 2rem;
+        color: var(--foreground-primary);
+    }
+    html[data-theme="nightfall"] .hero-eyebrow {
+        margin-top: 2.5rem;
+        opacity: 0.85;
+    }
+    html[data-theme="nightfall"] .hero-slogan {
+        font-size: 3rem;
+    }
+    html[data-theme="nightfall"] .hero-cta {
+        margin-bottom: 2.5rem;
+    }
+    html[data-theme="nightfall"] .hero-caption {
+        position: absolute;
+        z-index: 1;
+        right: 1rem;
+        bottom: 0.5rem;
+        max-width: 18rem;
+        text-align: right;
+        color: rgba(241, 233, 216, 0.8);
+    }
+}
