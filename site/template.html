@@ -5,78 +5,39 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Sewing Descent | {{{TITLE}}}</title>
         <link rel="icon" href="/static/logo.svg" />
-        <meta name="theme-color" content="#0f0e0d" />
+        <meta name="theme-color" content="#191816" />
         <meta
             name="description"
             content="Website to showcase my sewing projects and tutorials"
         />
         <meta name="author" content="Zach Newton" />
-        <link
-            rel="preload"
-            href="/static/punkboy.ttf"
-            as="font"
-            type="font/ttf"
-        />
         <style id="no-transition-on-load">
             body * {
                 transition: none !important;
             }
         </style>
+        <link rel="stylesheet" href="/styles/index.css" />
+        {{{PAGE_STYLES}}} {{{PREVIEW_STYLES}}}
     </head>
 
     <body>
-        <link rel="stylesheet" href="/styles/index.css" />
+        <a class="skip-link" href="#main-content">Skip to main content</a>
+        {{{THEME_INIT}}}
         <header>
             <section>
-                <h1 class="display">
+                <p class="display">
                     <a href="/">Sewing Descent</a>
-                </h1>
+                </p>
             </section>
             <section>
-                <input
-                    type="checkbox"
-                    name="mobile-nav-select"
-                    id="mobile-nav-select"
-                />
-                <nav>
-                    <a href="/projects.html">Projects</a>
-                    <a href="/blog.html">Blog</a>
+                <nav aria-label="Primary">
+                    <a href="/">Home</a>
+                    <a href="/journal.html">Journal</a>
                     <a href="/about.html">About</a>
                 </nav>
-                <label for="mobile-nav-select" id="mobile-nav-button">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        fill="currentColor"
-                        class="bi bi-list"
-                        viewBox="0 0 16 16"
-                        id="nav-menu-open-icon"
-                    >
-                        <title>Open Nav Menu</title>
-                        <path
-                            fill-rule="evenodd"
-                            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
-                        />
-                    </svg>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        fill="currentColor"
-                        class="bi bi-x-lg"
-                        viewBox="0 0 16 16"
-                        id="nav-menu-close-icon"
-                    >
-                        <title>Close Nav Menu</title>
-                        <path
-                            d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
-                        />
-                    </svg>
-                </label>
             </section>
         </header>
-        {{{CONTENT}}}
+        <div id="main-content">{{{CONTENT}}}</div>
         <footer>
             <section>
                 <a href="/faq.html">FAQs</a>
@@ -127,7 +88,7 @@
                 >
             </section>
         </footer>
-        <script src="/scripts/dom.js"></script>
-        {{{DEV}}}
+        <script src="/scripts/dom.js" defer></script>
+        {{{PREVIEW_TOOLBAR}}} {{{DEV}}}
     </body>
 </html>

@@ -1,16 +1,15 @@
 $mobile-breakpoint: 768px;
 
 :root {
-    --background-primary: #f8f6f0;
-    --foreground-primary: #0f0e0d;
-    --background-secondary: #dbdad8;
-    --foreground-secondary: #292724;
+    --background-primary: #f7f3ea;
+    --foreground-primary: #302d28;
+    --background-secondary: #ece5d7;
+    --foreground-secondary: #666055;
 
     --background-other: #9c8979;
-    // favorite green: #668d3c (not accessible)
-    --action-primary: #165d09;
+    --action-primary: #4b573f;
     --warning-primary: #8f3b1b;
-    --link: #165d09;
+    --link: #4b573f;
 
     --nav-menu-button-transition-duration: 150ms;
     --nav-menu-transition-duration: 200ms;
@@ -19,25 +18,40 @@ $mobile-breakpoint: 768px;
 
     --system-ui-font: system-ui, "Segoe UI", Roboto, Helvetica, Arial,
         sans-serif, "Segoe UI Symbol";
-}
+    --display-font: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino,
+        var(--system-ui-font);
+    --mono-font: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
-.dark {
-    --background-primary: #0f0e0d;
-    --foreground-primary: #f8f6f0;
-    --background-secondary: #292724;
-    --foreground-secondary: #dbdad8;
-    --action-primary: #77ab3f;
-    --link: #77ab3f;
+    --measure: 38rem;
+    --space-section: 3rem;
+    --space-card: 1.25rem;
+    --radius: 0.5rem;
+    --headline-scale: 1;
 }
 
 @font-face {
-    font-family: punkboy;
-    src: url("/static/punkboy.ttf");
+    font-family: "Punkboy";
+    src: url("/static/punkboy.otf") format("opentype");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
 }
 
 html,
 body {
     scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html,
+    body {
+        scroll-behavior: auto;
+    }
+    * {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
 }
 
 body {
@@ -49,13 +63,39 @@ body {
     background-color: var(--background-primary);
     color: var(--foreground-primary);
 }
+
+.skip-link {
+    position: absolute;
+    left: 0.5rem;
+    top: -3rem;
+    z-index: 10;
+    background: var(--background-primary);
+    color: var(--foreground-primary);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    border: 2px solid var(--link);
+    transition: top 150ms ease-out;
+    &:focus {
+        top: 0.5rem;
+    }
+}
+
+:focus-visible {
+    outline: 3px solid var(--link);
+    outline-offset: 2px;
+}
 hr {
     width: 100%;
     color: var(--background-secondary);
     border: none;
     border-bottom: 1px solid;
 }
-h1,h2,h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     box-sizing: border-box;
     width: 100%;
     margin: 0.4em 0;
@@ -107,19 +147,22 @@ a {
     }
 }
 
-header {
+body > header {
     display: flex;
     padding: 1rem;
     border-bottom: 1px solid var(--background-secondary);
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    row-gap: 0.5rem;
     section {
         display: flex;
         flex-direction: row;
-        flex-grow: 1;
-        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
         &:first-child {
+            flex-grow: 1;
             justify-content: start;
         }
         &:last-child {
@@ -127,11 +170,16 @@ header {
         }
     }
 }
-h1.display {
+.display {
     margin: 0;
     padding: 0;
-    font-family: punkboy, var(--system-ui-font);
-    flex-grow: 1;
+    font-family: "Punkboy", "Arial Black", var(--system-ui-font);
+    font-synthesis: none;
+    font-weight: 400;
+    letter-spacing: 0.025em;
+    font-size: clamp(1.9rem, 3.5vw, 2.4rem);
+    line-height: 1.15;
+    color: var(--foreground-primary);
     a {
         color: inherit;
         text-decoration: none;
@@ -141,17 +189,30 @@ h1.display {
     }
 }
 
-nav {
+/*
+ * Always-visible compact primary nav (site header only). Deliberately
+ * avoids a hidden checkbox/label disclosure pattern: every link stays
+ * reachable by keyboard, screen reader, and touch at every viewport
+ * width. Scoped to `header nav` so these styles never leak onto other
+ * <nav> elements, such as the About page's `.content-index` table of
+ * contents.
+ */
+header nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
     a {
         color: inherit;
-        font-family: punkboy, var(--system-ui-font);
+        font-family: var(--display-font);
+        font-weight: 600;
         text-decoration: none;
-        font-size: 1.2rem;
-        &:not(:first-child) {
-            padding-left: 1rem;
-        }
-        &.current-link {
+        font-size: 1.05rem;
+        padding: 0.5rem 0.25rem;
+        border-bottom: 2px solid transparent;
+        &[aria-current="page"] {
             color: var(--link);
+            border-bottom-color: var(--link);
         }
         &:hover {
             text-decoration: underline;
@@ -165,119 +226,19 @@ main {
         padding: 0 1rem;
         box-sizing: border-box;
         width: var(--mobile-breakpoint);
+        max-width: 100%;
     }
-}
-
-#mobile-nav-select,
-#mobile-nav-button {
-    display: none;
 }
 
 @media only screen and (max-width: $mobile-breakpoint) {
-    a {
-        padding: 1rem;
-        margin: -1rem;
-    }
-    header {
-        position: fixed;
-        z-index: 2;
-        width: 100%;
-        box-sizing: border-box;
-        margin: 0;
-        background: var(--background-primary);
-    }
-    #mobile-nav-button {
-        position: absolute;
-        right: 1rem;
-        top: 1rem;
-        overflow: hidden;
-        display: block;
-        box-sizing: border-box;
-        padding: 2rem;
-        margin: -2rem;
-        &:hover {
-            cursor: pointer;
-        }
-        svg {
-            box-sizing: border-box;
-            display: block;
-        }
-    }
-    nav {
-        display: flex;
-        position: absolute;
-        right: 0.25rem;
-        top: calc(100% + 1rem);
-        max-height: 20rem;
-        overflow: auto;
+    body > header {
         flex-direction: column;
-        align-items: start;
-        justify-content: start;
-        background-color: var(--background-primary);
-        border: 1px solid var(--background-secondary);
-        margin: 0;
-        z-index: 3;
-        // Hide by default
-        opacity: 0;
-        visibility: hidden;
-        transition:
-            visibility var(--nav-menu-transition-duration),
-            opacity var(--nav-menu-transition-duration) ease-in,
-            transform var(--nav-menu-transition-duration) ease-in;
-        transform-origin: top right;
-        transform: scale(0);
-        & a {
-            margin: 0;
-            padding: 1rem;
-            min-width: 15rem;
-            &:not(:last-child) {
-                border-bottom: inherit;
-            }
-        }
-    }
-    #mobile-nav-select:checked + nav {
-        // show
-        transition:
-            visibility 0s,
-            opacity var(--nav-menu-transition-duration) ease-in,
-            transform var(--nav-menu-transition-duration) ease-in;
-        visibility: visible;
-        opacity: 1;
-        transform: scale(1);
-    }
-    #mobile-nav-button svg:not(:first-child) {
-        // visibility requires that these overlap
-        margin-top: -100%;
-    }
-    #nav-menu-open-icon,
-    #nav-menu-close-icon {
-        transition:
-            visibility var(--nav-menu-button-transition-duration) ease-in,
-            transform var(--nav-menu-button-transition-duration) ease-in;
-    }
-    #mobile-nav-select:not(:checked) ~ #mobile-nav-button #nav-menu-open-icon,
-    #mobile-nav-select:checked ~ #mobile-nav-button #nav-menu-close-icon {
-        // show
-        visibility: visible;
-        transform: scale(1) rotate(0);
-        transition:
-            visibility var(--nav-menu-button-transition-duration) ease-in,
-            transform var(--nav-menu-button-transition-duration)
-                var(--nav-menu-button-transition-duration) ease-in;
-    }
-    #mobile-nav-select:not(:checked) ~ #mobile-nav-button #nav-menu-close-icon,
-    #mobile-nav-select:checked ~ #mobile-nav-button #nav-menu-open-icon {
-        // hide
-        visibility: hidden;
-        transform: scale(0) rotate(180deg);
-        transition:
-            visibility var(--nav-menu-button-transition-duration) ease-in,
-            transform var(--nav-menu-button-transition-duration) ease-in;
-    }
-    main {
-        padding-top: 4rem;
+        align-items: stretch;
         section {
-            width: 100%;
+            justify-content: center;
+        }
+        nav {
+            justify-content: center;
         }
     }
 }
@@ -320,6 +281,21 @@ footer {
 }
 .font-light {
     font-weight: 400;
+}
+
+.eyebrow {
+    margin: 0;
+    font-family: var(--mono-font);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.78rem;
+    color: var(--foreground-secondary);
+}
+
+.rule-number {
+    font-family: var(--mono-font);
+    font-size: 0.85rem;
+    color: var(--foreground-secondary);
 }
 
 .button {
@@ -416,5 +392,501 @@ ol {
     &.good-list li::before {
         content: "\01F44D\FE0E";
         color: var(--action-primary);
+    }
+}
+
+/* ---------- Long-form page layout (About) ---------- */
+.prose {
+    max-width: var(--measure);
+    width: 100%;
+    line-height: 1.6;
+}
+
+.about-intro {
+    padding-top: 1rem;
+    h1 {
+        font-family: var(--display-font);
+        font-size: 2.5rem;
+        margin: 0.25rem 0 0.75rem;
+        letter-spacing: -0.01em;
+    }
+}
+
+.page-with-rail {
+    width: 100%;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+.content-index {
+    order: -1;
+    border: 1px solid var(--link);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    background: var(--background-secondary);
+    h2 {
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0 0 0.5rem;
+    }
+    ol {
+        margin: 0;
+        padding-left: 1.1rem;
+        font-family: var(--system-ui-font);
+        line-height: 1.4;
+    }
+    ol ol {
+        margin-top: 0.35rem;
+    }
+    li {
+        margin-bottom: 0.35rem;
+    }
+    a {
+        /* inline-block gives this its own box height, keeping it
+         * clear of neighboring list items. */
+        display: inline-block;
+        padding: 0.1rem 0;
+        color: inherit;
+        font-weight: 600;
+    }
+}
+
+@media only screen and (min-width: 960px) {
+    .page-with-rail {
+        grid-template-columns: 16rem minmax(0, 1fr);
+    }
+    .content-index {
+        order: 0;
+        position: sticky;
+        top: 1.5rem;
+        align-self: start;
+    }
+}
+
+/*
+ * Broad stacked "rule rows" rather than a narrow multi-column card
+ * grid: each principle's prose reads at full measure instead of being
+ * squeezed into a ~14rem card, while the number still gives each rule
+ * a clear, scannable identity.
+ */
+.principle-cards {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 1.5rem 0;
+    padding: 0;
+    list-style: none;
+}
+.principle-card {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    column-gap: 1.25rem;
+    align-items: start;
+    width: 100%;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--background-secondary);
+    &:last-child {
+        border-bottom: 1px solid var(--background-secondary);
+    }
+    .rule-number {
+        grid-row: 1 / 3;
+        font-size: 1.5rem;
+        line-height: 1;
+        color: var(--link);
+    }
+    h3 {
+        grid-column: 2;
+        margin: 0;
+        font-family: var(--display-font);
+    }
+    p {
+        grid-column: 2;
+        margin: 0.5rem 0 0;
+        max-width: var(--measure);
+    }
+}
+.principle-secondary-heading {
+    margin-top: 2rem;
+}
+
+details.material-detail {
+    border: 1px solid var(--background-secondary);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    > summary {
+        cursor: pointer;
+        font-weight: 600;
+        font-family: var(--display-font);
+    }
+}
+
+/* ---------- Journal listing ---------- */
+.journal-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    padding: 0;
+    list-style: none;
+}
+.journal-filters button {
+    font: inherit;
+    cursor: pointer;
+    color: inherit;
+    background: var(--background-secondary);
+    border: 1px solid var(--background-secondary);
+    border-radius: 2rem;
+    padding: 0.4rem 0.9rem;
+    &[aria-pressed="true"] {
+        background: var(--link);
+        border-color: var(--link);
+        color: var(--background-primary);
+    }
+}
+.journal-list {
+    width: 100%;
+    list-style: none;
+    margin: 1rem 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-card);
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+.journal-card {
+    border: 1px solid var(--background-secondary);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    &[hidden] {
+        display: none;
+    }
+    .journal-card-meta {
+        font-size: 0.85rem;
+        font-family: var(--mono-font);
+        opacity: 0.8;
+    }
+    .journal-card-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 0.8rem;
+    }
+    .journal-card-tags li {
+        background: var(--background-secondary);
+        border-radius: 1rem;
+        padding: 0.15rem 0.6rem;
+    }
+    .draft-badge {
+        align-self: start;
+        font-size: 0.75rem;
+        font-family: var(--mono-font);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        background: var(--warning-primary);
+        color: var(--background-primary);
+        padding: 0.15rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+}
+.journal-empty {
+    border: 1px dashed var(--background-secondary);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+}
+
+/* ---------- Article template ---------- */
+.article-header {
+    width: 100%;
+    h1 {
+        font-family: var(--display-font);
+    }
+    .article-dek {
+        font-size: 1.1rem;
+        color: var(--foreground-secondary);
+    }
+    .article-meta {
+        font-family: var(--mono-font);
+        font-size: 0.85rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+    }
+}
+.article-cover {
+    width: 100%;
+    margin: 0 0 1rem;
+    img {
+        width: 100%;
+        height: auto;
+        border-radius: var(--radius);
+    }
+    figcaption {
+        font-size: 0.85rem;
+        color: var(--foreground-secondary);
+        margin-top: 0.5rem;
+    }
+}
+.layout-example-banner {
+    border: 1px dashed var(--warning-primary);
+    color: var(--warning-primary);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* ---------- Preview toolbar (preview builds only) ---------- */
+.preview-toolbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: var(--foreground-primary);
+    color: var(--background-primary);
+    font-family: var(--mono-font);
+    font-size: 0.85rem;
+    span.preview-toolbar-label {
+        font-weight: 700;
+        margin-right: 0.25rem;
+    }
+    button,
+    a {
+        font: inherit;
+        color: inherit;
+        background: transparent;
+        border: 1px solid var(--background-primary);
+        border-radius: 0.3rem;
+        padding: 0.4rem 0.75rem;
+        min-height: 2rem;
+        min-width: 2rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        text-decoration: none;
+        &[aria-pressed="true"] {
+            background: var(--background-primary);
+            color: var(--foreground-primary);
+        }
+    }
+}
+/* Toolbar height varies (it wraps on narrow viewports), so its real
+ * rendered height is tracked into --preview-toolbar-height by
+ * theme.js via ResizeObserver. Reserved on `body`, not just `main`,
+ * since `footer` is a sibling of `main`. */
+body:has(.preview-toolbar) {
+    padding-bottom: var(--preview-toolbar-height, 3.5rem);
+}
+
+/* ---------- Directions hub ---------- */
+.directions-hub {
+    max-width: 72rem;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+.direction-cards {
+    width: 100%;
+    display: grid;
+    gap: var(--space-card);
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    list-style: none;
+    margin: 1rem 0;
+    padding: 0;
+}
+@media only screen and (min-width: 960px) {
+    .direction-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+.direction-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+.direction-card {
+    border: 1px solid var(--background-secondary);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+}
+
+/*
+ * Small, non-photographic CSS composition thumbnails that mirror each
+ * direction's real desktop grid proportions.
+ */
+.direction-thumb {
+    position: relative;
+    display: grid;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--background-secondary);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 1rem;
+    background: var(--background-primary);
+}
+.direction-thumb .thumb-media {
+    background: var(--foreground-secondary);
+    opacity: 0.55;
+}
+.direction-thumb .thumb-copy {
+    background: var(--background-secondary);
+}
+.direction-thumb .thumb-rail {
+    background: var(--background-secondary);
+    opacity: 0.85;
+}
+.direction-thumb[data-direction="field-notes"],
+.direction-thumb[data-direction="field-notes-nightfall"] {
+    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-areas: "copy media";
+    .thumb-copy {
+        grid-area: copy;
+    }
+    .direction-thumb[data-direction="field-notes-nightfall"] {
+        background: #191816;
+        .thumb-copy {
+            margin: 1rem;
+            background: linear-gradient(
+                to bottom,
+                transparent 30%,
+                #e9dfcd 30%,
+                #e9dfcd 40%,
+                transparent 40%,
+                transparent 48%,
+                #bdb3a3 48%,
+                #bdb3a3 58%,
+                transparent 58%
+            );
+        }
+        .thumb-media {
+            background: #786b58;
+        }
+    }
+    .thumb-media {
+        grid-area: media;
+    }
+    .thumb-rail {
+        display: none;
+    }
+}
+.direction-thumb[data-direction="workshop"] {
+    grid-template-columns: 0.32fr 0.68fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+        "rail copy"
+        "rail media";
+    .thumb-rail {
+        grid-area: rail;
+    }
+    .thumb-copy {
+        grid-area: copy;
+    }
+    .thumb-media {
+        grid-area: media;
+    }
+}
+.direction-thumb[data-direction="nightfall"] {
+    grid-template-columns: 1fr;
+    grid-template-areas: "stage";
+    .thumb-media {
+        grid-area: stage;
+        opacity: 1;
+        background: linear-gradient(135deg, #1a1512, #3a2a20);
+    }
+    .thumb-rail {
+        display: none;
+    }
+    .thumb-copy {
+        grid-area: stage;
+        align-self: end;
+        justify-self: start;
+        width: 62%;
+        height: 42%;
+        margin: 0.6rem;
+        background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.7),
+            rgba(0, 0, 0, 0)
+        );
+    }
+}
+
+html:not([data-theme]),
+html[data-theme="field-notes-nightfall"] {
+    color-scheme: dark;
+    --background-primary: #191816;
+    --foreground-primary: #e9dfcd;
+    --background-secondary: #302c26;
+    --foreground-secondary: #bdb3a3;
+    --action-primary: #c9a779;
+    --warning-primary: #d68f62;
+    --link: #c9a779;
+
+    .page-with-rail {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        main {
+            gap: 1.5rem;
+        }
+    }
+
+    main > section.prose:not(.home-section, .journal-index, .directions-hub),
+    .home-mission,
+    .journal-card,
+    .content-index,
+    .direction-card {
+        color-scheme: light;
+        --background-primary: #e9dfcd;
+        --foreground-primary: #302a23;
+        --background-secondary: #dbceb8;
+        --foreground-secondary: #665a49;
+        --action-primary: #66472f;
+        --warning-primary: #8f3b1b;
+        --link: #66472f;
+        background: var(--background-primary);
+        color: var(--foreground-primary);
+        border: 1px solid var(--background-secondary);
+        border-radius: var(--radius);
+    }
+
+    main > section.prose:not(.home-section, .journal-index, .directions-hub) {
+        --measure: 43rem;
+        width: calc(100% - 2rem);
+        padding: clamp(1.25rem, 4vw, 2.5rem);
+        margin: 2rem auto;
+    }
+    .page-with-rail main > section.prose {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .home-mission {
+        border-top: 2px dashed var(--link);
+    }
+    .preview-toolbar {
+        --foreground-primary: #24211d;
+        --background-primary: #e9dfcd;
     }
 }

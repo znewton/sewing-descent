@@ -15,7 +15,7 @@ import { getOutputDir, getRootDir } from "./utils.js";
 const DEV_PORT = 4567;
 
 // Adapted from https://developer.mozilla.org/en-US/docs/Learn/Server-side/Node_server_without_framework
-class FileServer {
+export class FileServer {
 	MIME_TYPES = {
 		default: "application/octet-stream",
 		html: "text/html; charset=UTF-8",
@@ -26,6 +26,10 @@ class FileServer {
 		gif: "image/gif",
 		ico: "image/x-icon",
 		svg: "image/svg+xml",
+		webp: "image/webp",
+		ttf: "font/ttf",
+		otf: "font/otf",
+		json: "application/json",
 	};
 	STATIC_PATH = getOutputDir();
 	toBool = [() => true, () => false];
@@ -33,13 +37,19 @@ class FileServer {
 	 * @type {Record<string, WebSocket>}
 	 */
 	connections = {};
-	prepareFile = async (url) => {
-		const paths = [this.STATIC_PATH, url];
-		if (url.endsWith("/")) paths.push("index.html");
+	prepareFile = async (requestUrl) => {
+		const url = new URL(requestUrl, "http://localhost");
+		const pathname = decodeURIComponent(url.pathname);
+		const paths = [this.STATIC_PATH, pathname];
+		if (pathname.endsWith("/")) paths.push("index.html");
 		const filePath = path.join(...paths);
-		const pathTraversal = !filePath.startsWith(this.STATIC_PATH);
-		const exists = await fs.access(filePath).then(...this.toBool);
-		const found = !pathTraversal && exists;
+		const relativePath = path.relative(this.STATIC_PATH, filePath);
+		const pathTraversal =
+			relativePath === ".." ||
+			relativePath.startsWith(`..${path.sep}`) ||
+			path.isAbsolute(relativePath);
+		const found =
+			!pathTraversal && (await fs.access(filePath).then(...this.toBool));
 		const streamPath = found ? filePath : `${this.STATIC_PATH}/404.html`;
 		const ext = path.extname(streamPath).substring(1).toLowerCase();
 		const stream = fsSync.createReadStream(streamPath);
@@ -66,7 +76,18 @@ class FileServer {
 		}
 	};
 	handleHttpRequest = async (req, res) => {
-		const file = await this.prepareFile(req.url);
+		let file;
+		try {
+			file = await this.prepareFile(req.url);
+		} catch (error) {
+			if (!(error instanceof URIError) && error.code !== "ERR_INVALID_URL") {
+				throw error;
+			}
+			console.warn("Invalid request URL:", error.message);
+			res.writeHead(400, { "Content-Type": "text/plain; charset=UTF-8" });
+			res.end("Invalid request URL.");
+			return;
+		}
 		const statusCode = file.found ? 200 : 404;
 		const mimeType = this.MIME_TYPES[file.ext] || this.MIME_TYPES.default;
 		res.writeHead(statusCode, { "Content-Type": mimeType });
@@ -87,7 +108,9 @@ class FileServer {
 						return reject(err);
 					}
 					this.initSocketServer(server);
-					open(`http://localhost:${port}`);
+					if (!process.argv.includes("--no-open")) {
+						open(`http://localhost:${port}`);
+					}
 					resolve(this);
 				});
 		});

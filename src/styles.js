@@ -29,15 +29,18 @@ export async function buildStyles() {
 	 */
 	const outputStyleWritePs = [];
 	for (const inputStyleFile of inputStyleFiles) {
+		if (inputStyleFile.isDirectory()) {
+			continue;
+		}
 		const [fileName, fileType] = inputStyleFile.name.split(".");
 		if (!["css", "scss"].includes(fileType)) {
 			console.error(
-				`File ${inputStyleFile.name} at ${inputStyleFile.path} is not a valid type. Must be "css" or "scss".`,
+				`File ${inputStyleFile.name} at ${styleDir} is not a valid type. Must be "css" or "scss".`,
 			);
 			throw new Error(`Invalid page file: ${inputStyleFile.name}.`);
 		}
 
-		const stylePath = path.join(inputStyleFile.path, inputStyleFile.name);
+		const stylePath = path.join(styleDir, inputStyleFile.name);
 		const rawStyleContent = await fs.readFile(stylePath);
 		const style =
 			fileType === "scss" ? sassCompile(stylePath).css : rawStyleContent;

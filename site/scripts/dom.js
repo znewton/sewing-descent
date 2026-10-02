@@ -2,17 +2,10 @@
 window.addEventListener(
 	"load",
 	() => {
-		document.getElementById("no-transition-on-load").remove();
+		document.getElementById("no-transition-on-load")?.remove();
 	},
 	{ once: true },
 );
-
-// Assign a visual cue to the nav links to show what page is shown.
-for (const navLink of document.querySelectorAll(
-	`nav a[href="${new URL(document.URL).pathname}"]`,
-)) {
-	navLink.className += " current-link";
-}
 
 // Add link-ability to headers with IDs
 const headingLevels = [1, 2, 3, 4, 5, 6];
